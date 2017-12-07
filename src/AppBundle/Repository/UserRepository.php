@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * UserRepository
@@ -10,4 +11,12 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getPagination($page, $nbParPage)
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->setFirstResult(($page - 1) * $nbParPage)
+            ->setMaxResults($nbParPage);
+
+        return new Paginator($qb->getQuery());
+    }
 }
